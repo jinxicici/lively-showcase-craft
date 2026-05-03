@@ -111,15 +111,17 @@
 
 @keyframes petal-fall {
   0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
+  10% { opacity: 0.45; }
+  90% { opacity: 0.45; }
   100% { transform: translateY(110vh) translateX(var(--drift, 60px)) rotate(540deg); opacity: 0; }
 }
 .petal {
   position: fixed; top: 0; pointer-events: none; z-index: 2;
   will-change: transform, opacity;
   animation: petal-fall linear infinite;
-  filter: drop-shadow(0 2px 4px hsl(335 85% 65% / 0.3));
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  filter: drop-shadow(0 2px 4px hsl(335 85% 65% / 0.15));
 }
 @keyframes wiggle {
   0%, 100% { transform: rotate(-4deg); }
