@@ -52,44 +52,78 @@ const Cursor = () => {
       style={{ x: sx, y: sy }}
     >
       <motion.div
-        animate={{ scale: down ? 0.85 : hover ? 1.2 : 1 }}
+        animate={{ scale: down ? 0.88 : hover ? 1.15 : 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        style={{
-          filter: "drop-shadow(0 4px 10px hsl(335 95% 60% / 0.45))",
-          imageRendering: "pixelated",
-          shapeRendering: "crispEdges",
-        }}
+        style={{ filter: "drop-shadow(0 4px 10px hsl(335 95% 60% / 0.4))" }}
       >
-        {/* Pixel-style arrow cursor: hot pink border + frosted glass fill (solid, no gradient) */}
-        <svg width="44" height="52" viewBox="0 0 22 26" shapeRendering="crispEdges" style={{ imageRendering: "pixelated" }}>
-          <defs>
-            <clipPath id="px-arrow-clip">
-              <path d="M3 2 L3 19 L7 16 L10 22 L13 21 L10 15 L16 15 Z" />
-            </clipPath>
-          </defs>
-          {/* frosted glass fill — solid translucent white, no gradient */}
-          <foreignObject x="0" y="0" width="22" height="26" clipPath="url(#px-arrow-clip)">
-            <div
-              // @ts-ignore
-              xmlns="http://www.w3.org/1999/xhtml"
-              style={{
-                width: "100%",
-                height: "100%",
-                background: "hsla(0, 0%, 100%, 0.55)",
-                backdropFilter: "blur(10px) saturate(180%)",
-                WebkitBackdropFilter: "blur(10px) saturate(180%)",
-              }}
-            />
-          </foreignObject>
-          {/* chunky pixel pink border */}
-          <path
-            d="M3 2 L3 19 L7 16 L10 22 L13 21 L10 15 L16 15 Z"
-            fill="none"
-            stroke="hsl(330 100% 55%)"
-            strokeWidth="1.5"
-            strokeLinejoin="miter"
-          />
-        </svg>
+        {/* Classic pixel arrow cursor — pink border + frosted glass interior */}
+        {(() => {
+          // Pixel map: 1 = body (frosted glass), 2 = border (pink). 0 = transparent.
+          // 12 cols x 19 rows, classic Windows arrow tilt
+          const grid = [
+            "200000000000",
+            "220000000000",
+            "212000000000",
+            "211200000000",
+            "211120000000",
+            "211112000000",
+            "211111200000",
+            "211111120000",
+            "211111112000",
+            "211111111200",
+            "211111111120",
+            "211111120000",
+            "211121120000",
+            "212022112000",
+            "220002112000",
+            "200000211200",
+            "000000211200",
+            "000000022200",
+            "000000002000",
+          ];
+          const px = 4; // pixel size
+          const cols = 12, rows = 19;
+          const W = cols * px, H = rows * px;
+          const bodyCells: { x: number; y: number }[] = [];
+          const borderCells: { x: number; y: number }[] = [];
+          grid.forEach((row, y) => {
+            for (let x = 0; x < row.length; x++) {
+              if (row[x] === "1") bodyCells.push({ x: x * px, y: y * px });
+              else if (row[x] === "2") borderCells.push({ x: x * px, y: y * px });
+            }
+          });
+          // Build clipPath for frosted body
+          const clipId = "cursor-body-clip";
+          return (
+            <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} shapeRendering="crispEdges">
+              <defs>
+                <clipPath id={clipId}>
+                  {bodyCells.map((c, i) => (
+                    <rect key={i} x={c.x} y={c.y} width={px} height={px} />
+                  ))}
+                </clipPath>
+              </defs>
+              {/* frosted glass interior — solid translucent white, blur background */}
+              <foreignObject x="0" y="0" width={W} height={H} clipPath={`url(#${clipId})`}>
+                <div
+                  // @ts-ignore
+                  xmlns="http://www.w3.org/1999/xhtml"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    background: "hsla(0, 0%, 100%, 0.5)",
+                    backdropFilter: "blur(10px) saturate(180%)",
+                    WebkitBackdropFilter: "blur(10px) saturate(180%)",
+                  }}
+                />
+              </foreignObject>
+              {/* pink pixel border */}
+              {borderCells.map((c, i) => (
+                <rect key={i} x={c.x} y={c.y} width={px} height={px} fill="hsl(330 100% 58%)" />
+              ))}
+            </svg>
+          );
+        })()}
       </motion.div>
     </motion.div>
   );
