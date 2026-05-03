@@ -133,6 +133,46 @@ const Petals = () => {
   return <div aria-hidden className="pointer-events-none fixed inset-0 z-[2] overflow-hidden">{petals}</div>;
 };
 
+/* --------- Quick Contact (click to copy) --------- */
+const CopyChip = ({ icon: Icon, label, value }: { icon: any; label: string; value: string }) => {
+  const [done, setDone] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setDone(true);
+      toast.success(`${label}已复制`, { description: value });
+      setTimeout(() => setDone(false), 1600);
+    } catch {
+      toast.error("复制失败，请手动选择");
+    }
+  };
+  return (
+    <button
+      data-cursor
+      onClick={copy}
+      className="group flex items-center gap-2 rounded-full border-2 border-primary/30 bg-white/80 px-4 py-2 text-sm font-medium text-primary shadow-[0_4px_0_hsl(335_90%_60%/0.25)] transition-all hover:border-primary hover:bg-primary hover:text-white hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_2px_0_hsl(335_90%_60%/0.25)]"
+      title={`点击复制${label}`}
+    >
+      <Icon className="h-4 w-4" />
+      <span className="font-mono">{value}</span>
+      {done ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5 opacity-50 group-hover:opacity-100" />}
+    </button>
+  );
+};
+
+const ContactBar = () => (
+  <div className="fixed top-16 left-0 right-0 z-40 px-6 pointer-events-none">
+    <div className="mx-auto max-w-7xl flex justify-center md:justify-end pointer-events-auto">
+      <div className="flex flex-wrap items-center gap-2 rounded-full border-2 border-primary/20 bg-white/70 backdrop-blur-xl px-3 py-2 shadow-[0_8px_24px_-8px_hsl(335_90%_60%/0.3)]">
+        <span className="hidden md:inline pl-2 pr-1 text-xs font-mono uppercase tracking-widest text-primary">点击复制 →</span>
+        <CopyChip icon={Mail} label="邮箱" value="jinxi_cici@163.com" />
+        <CopyChip icon={Phone} label="电话" value="139 0585 5692" />
+        <CopyChip icon={MessageCircle} label="微信" value="Paranoiavine" />
+      </div>
+    </div>
+  </div>
+);
+
 /* --------- Hero --------- */
 const Hero = () => {
   const ref = useRef<HTMLDivElement>(null);
