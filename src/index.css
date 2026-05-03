@@ -6,45 +6,45 @@
 
 @layer base {
   :root {
-    --background: 38 30% 96%;
-    --foreground: 20 14% 8%;
+    --background: 340 60% 97%;
+    --foreground: 340 30% 18%;
 
-    --card: 38 25% 98%;
-    --card-foreground: 20 14% 8%;
+    --card: 340 60% 99%;
+    --card-foreground: 340 30% 18%;
 
-    --popover: 38 30% 96%;
-    --popover-foreground: 20 14% 8%;
+    --popover: 340 60% 97%;
+    --popover-foreground: 340 30% 18%;
 
-    --primary: 20 14% 8%;
-    --primary-foreground: 38 30% 96%;
+    --primary: 340 70% 55%;
+    --primary-foreground: 340 60% 99%;
 
-    --secondary: 38 20% 90%;
-    --secondary-foreground: 20 14% 8%;
+    --secondary: 340 50% 92%;
+    --secondary-foreground: 340 30% 18%;
 
-    --muted: 38 18% 88%;
-    --muted-foreground: 20 8% 38%;
+    --muted: 340 40% 94%;
+    --muted-foreground: 340 15% 45%;
 
-    --accent: 14 88% 55%;
-    --accent-foreground: 38 30% 96%;
+    --accent: 335 85% 65%;
+    --accent-foreground: 340 60% 99%;
 
-    --highlight: 45 95% 60%;
-    --ink: 20 14% 8%;
-    --cream: 38 30% 96%;
-    --paper: 38 25% 92%;
+    --highlight: 320 90% 80%;
+    --ink: 340 30% 18%;
+    --cream: 340 60% 97%;
+    --paper: 340 50% 94%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 38 30% 96%;
+    --destructive-foreground: 340 60% 99%;
 
-    --border: 20 14% 88%;
-    --input: 20 14% 88%;
-    --ring: 14 88% 55%;
+    --border: 340 40% 88%;
+    --input: 340 40% 88%;
+    --ring: 335 85% 65%;
 
-    --radius: 0.75rem;
+    --radius: 1.25rem;
 
-    --gradient-warm: linear-gradient(135deg, hsl(14 88% 55%), hsl(35 95% 60%));
-    --gradient-ink: linear-gradient(180deg, hsl(20 14% 8%), hsl(20 14% 14%));
-    --shadow-soft: 0 1px 2px hsl(20 14% 8% / 0.04), 0 8px 32px hsl(20 14% 8% / 0.06);
-    --shadow-bold: 0 20px 60px -20px hsl(14 88% 55% / 0.4);
+    --gradient-warm: linear-gradient(135deg, hsl(335 85% 70%), hsl(320 90% 80%));
+    --gradient-ink: linear-gradient(180deg, hsl(340 30% 18%), hsl(340 25% 25%));
+    --shadow-soft: 0 1px 2px hsl(335 60% 50% / 0.06), 0 8px 32px hsl(335 60% 50% / 0.10);
+    --shadow-bold: 0 20px 60px -20px hsl(335 85% 65% / 0.5);
   }
 }
 
@@ -104,3 +104,25 @@
 
 @keyframes blink { 50% { opacity: 0; } }
 .cursor-blink::after { content:"_"; animation: blink 1s step-end infinite; margin-left: 2px; }
+
+@media (pointer: fine) {
+  html, body, a, button, [role="button"] { cursor: none !important; }
+}
+
+@keyframes petal-fall {
+  0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(110vh) translateX(var(--drift, 60px)) rotate(540deg); opacity: 0; }
+}
+.petal {
+  position: fixed; top: 0; pointer-events: none; z-index: 2;
+  will-change: transform, opacity;
+  animation: petal-fall linear infinite;
+  filter: drop-shadow(0 2px 4px hsl(335 85% 65% / 0.3));
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+.wiggle { animation: wiggle 2.5s ease-in-out infinite; transform-origin: center; }
