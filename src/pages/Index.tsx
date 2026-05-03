@@ -771,6 +771,7 @@ const Index = () => {
       <Cursor />
       <Petals />
       <Nav />
+      <ContactBar />
       <Hero />
       <Tools />
       <Accounts />
