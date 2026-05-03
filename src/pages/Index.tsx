@@ -22,18 +22,28 @@ const SectionLabel = ({ n, t }: { n: string; t: string }) => (
   </div>
 );
 
-/* --------- Cursor follower --------- */
+/* --------- Cute Mouse Cursor --------- */
 const Cursor = () => {
   const x = useMotionValue(-100), y = useMotionValue(-100);
-  const sx = useSpring(x, { stiffness: 300, damping: 30 });
-  const sy = useSpring(y, { stiffness: 300, damping: 30 });
+  const sx = useSpring(x, { stiffness: 400, damping: 28, mass: 0.4 });
+  const sy = useSpring(y, { stiffness: 400, damping: 28, mass: 0.4 });
   const [hover, setHover] = useState(false);
+  const [down, setDown] = useState(false);
   useEffect(() => {
     const m = (e: MouseEvent) => { x.set(e.clientX); y.set(e.clientY); };
     const o = (e: any) => setHover(!!e.target.closest?.("a,button,[data-cursor]"));
+    const d = () => setDown(true);
+    const u = () => setDown(false);
     window.addEventListener("mousemove", m);
     window.addEventListener("mouseover", o);
-    return () => { window.removeEventListener("mousemove", m); window.removeEventListener("mouseover", o); };
+    window.addEventListener("mousedown", d);
+    window.addEventListener("mouseup", u);
+    return () => {
+      window.removeEventListener("mousemove", m);
+      window.removeEventListener("mouseover", o);
+      window.removeEventListener("mousedown", d);
+      window.removeEventListener("mouseup", u);
+    };
   }, [x, y]);
   return (
     <motion.div
@@ -41,11 +51,70 @@ const Cursor = () => {
       style={{ x: sx, y: sy }}
     >
       <motion.div
-        animate={{ scale: hover ? 2.2 : 1, opacity: hover ? 0.4 : 0.9 }}
-        className="h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent mix-blend-difference"
-      />
+        animate={{ scale: down ? 0.85 : hover ? 1.25 : 1, rotate: hover ? -8 : 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        className="-translate-x-1/2 -translate-y-1/2"
+      >
+        <svg width="72" height="72" viewBox="0 0 100 100" className="drop-shadow-[0_6px_18px_hsl(335_85%_65%/0.55)]">
+          <defs>
+            <radialGradient id="cbody" cx="50%" cy="40%" r="60%">
+              <stop offset="0%" stopColor="hsl(340 100% 96%)" />
+              <stop offset="100%" stopColor="hsl(335 85% 78%)" />
+            </radialGradient>
+          </defs>
+          <circle cx="28" cy="28" r="16" fill="url(#cbody)" stroke="hsl(340 50% 35%)" strokeWidth="2"/>
+          <circle cx="72" cy="28" r="16" fill="url(#cbody)" stroke="hsl(340 50% 35%)" strokeWidth="2"/>
+          <circle cx="28" cy="28" r="8" fill="hsl(335 85% 70%)"/>
+          <circle cx="72" cy="28" r="8" fill="hsl(335 85% 70%)"/>
+          <circle cx="50" cy="58" r="30" fill="url(#cbody)" stroke="hsl(340 50% 35%)" strokeWidth="2.5"/>
+          <circle cx="32" cy="65" r="5" fill="hsl(335 90% 75%)" opacity="0.7"/>
+          <circle cx="68" cy="65" r="5" fill="hsl(335 90% 75%)" opacity="0.7"/>
+          <ellipse cx="40" cy="55" rx="3" ry={hover ? 1 : 4} fill="hsl(340 50% 20%)"/>
+          <ellipse cx="60" cy="55" rx="3" ry={hover ? 1 : 4} fill="hsl(340 50% 20%)"/>
+          <ellipse cx="50" cy="65" rx="3" ry="2" fill="hsl(340 70% 45%)"/>
+          <path d="M 46 70 Q 50 74 54 70" stroke="hsl(340 50% 30%)" strokeWidth="1.8" fill="none" strokeLinecap="round"/>
+        </svg>
+      </motion.div>
     </motion.div>
   );
+};
+
+/* --------- Falling Petals --------- */
+const Petals = () => {
+  const petals = Array.from({ length: 22 }, (_, i) => {
+    const left = Math.random() * 100;
+    const size = 14 + Math.random() * 22;
+    const duration = 12 + Math.random() * 14;
+    const delay = -Math.random() * 20;
+    const drift = (Math.random() - 0.5) * 240;
+    const hue = 320 + Math.random() * 25;
+    const sat = 80 + Math.random() * 15;
+    const light = 75 + Math.random() * 12;
+    return (
+      <svg
+        key={i}
+        className="petal"
+        style={{
+          left: `${left}vw`,
+          width: size,
+          height: size,
+          animationDuration: `${duration}s`,
+          animationDelay: `${delay}s`,
+          // @ts-ignore
+          "--drift": `${drift}px`,
+        }}
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M12 2 C 16 6, 18 12, 12 22 C 6 12, 8 6, 12 2 Z"
+          fill={`hsl(${hue} ${sat}% ${light}%)`}
+          stroke={`hsl(${hue} 60% 60% / 0.5)`}
+          strokeWidth="0.5"
+        />
+      </svg>
+    );
+  });
+  return <div aria-hidden className="pointer-events-none fixed inset-0 z-[2] overflow-hidden">{petals}</div>;
 };
 
 /* --------- Hero --------- */
