@@ -33,18 +33,18 @@
     --paper: 340 50% 94%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 38 30% 96%;
+    --destructive-foreground: 340 60% 99%;
 
-    --border: 20 14% 88%;
-    --input: 20 14% 88%;
-    --ring: 14 88% 55%;
+    --border: 340 40% 88%;
+    --input: 340 40% 88%;
+    --ring: 335 85% 65%;
 
-    --radius: 0.75rem;
+    --radius: 1.25rem;
 
-    --gradient-warm: linear-gradient(135deg, hsl(14 88% 55%), hsl(35 95% 60%));
-    --gradient-ink: linear-gradient(180deg, hsl(20 14% 8%), hsl(20 14% 14%));
-    --shadow-soft: 0 1px 2px hsl(20 14% 8% / 0.04), 0 8px 32px hsl(20 14% 8% / 0.06);
-    --shadow-bold: 0 20px 60px -20px hsl(14 88% 55% / 0.4);
+    --gradient-warm: linear-gradient(135deg, hsl(335 85% 70%), hsl(320 90% 80%));
+    --gradient-ink: linear-gradient(180deg, hsl(340 30% 18%), hsl(340 25% 25%));
+    --shadow-soft: 0 1px 2px hsl(335 60% 50% / 0.06), 0 8px 32px hsl(335 60% 50% / 0.10);
+    --shadow-bold: 0 20px 60px -20px hsl(335 85% 65% / 0.5);
   }
 }
 
