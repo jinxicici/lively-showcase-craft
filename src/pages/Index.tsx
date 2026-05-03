@@ -713,6 +713,7 @@ const Index = () => {
   return (
     <main className="grain min-h-screen bg-cream text-foreground">
       <Cursor />
+      <Petals />
       <Nav />
       <Hero />
       <Tools />
