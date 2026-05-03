@@ -51,28 +51,48 @@ const Cursor = () => {
       style={{ x: sx, y: sy }}
     >
       <motion.div
-        animate={{ scale: down ? 0.85 : hover ? 1.25 : 1, rotate: hover ? -8 : 0 }}
+        animate={{ scale: down ? 0.85 : hover ? 1.2 : 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="-translate-x-1/2 -translate-y-1/2"
+        style={{ filter: "drop-shadow(0 6px 16px hsl(335 85% 65% / 0.45))" }}
       >
-        <svg width="72" height="72" viewBox="0 0 100 100" className="drop-shadow-[0_6px_18px_hsl(335_85%_65%/0.55)]">
+        {/* Arrow-shaped mouse pointer: pink border + frosted glass fill */}
+        <svg width="56" height="64" viewBox="0 0 56 64" className="overflow-visible">
           <defs>
-            <radialGradient id="cbody" cx="50%" cy="40%" r="60%">
-              <stop offset="0%" stopColor="hsl(340 100% 96%)" />
-              <stop offset="100%" stopColor="hsl(335 85% 78%)" />
-            </radialGradient>
+            <clipPath id="arrow-clip">
+              <path d="M6 4 L6 50 L18 40 L26 58 L34 54 L26 36 L42 36 Z" />
+            </clipPath>
+            <linearGradient id="arrow-glass" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="hsl(340 100% 98%)" stopOpacity="0.85"/>
+              <stop offset="50%" stopColor="hsl(335 90% 88%)" stopOpacity="0.45"/>
+              <stop offset="100%" stopColor="hsl(320 90% 80%)" stopOpacity="0.55"/>
+            </linearGradient>
           </defs>
-          <circle cx="28" cy="28" r="16" fill="url(#cbody)" stroke="hsl(340 50% 35%)" strokeWidth="2"/>
-          <circle cx="72" cy="28" r="16" fill="url(#cbody)" stroke="hsl(340 50% 35%)" strokeWidth="2"/>
-          <circle cx="28" cy="28" r="8" fill="hsl(335 85% 70%)"/>
-          <circle cx="72" cy="28" r="8" fill="hsl(335 85% 70%)"/>
-          <circle cx="50" cy="58" r="30" fill="url(#cbody)" stroke="hsl(340 50% 35%)" strokeWidth="2.5"/>
-          <circle cx="32" cy="65" r="5" fill="hsl(335 90% 75%)" opacity="0.7"/>
-          <circle cx="68" cy="65" r="5" fill="hsl(335 90% 75%)" opacity="0.7"/>
-          <ellipse cx="40" cy="55" rx="3" ry={hover ? 1 : 4} fill="hsl(340 50% 20%)"/>
-          <ellipse cx="60" cy="55" rx="3" ry={hover ? 1 : 4} fill="hsl(340 50% 20%)"/>
-          <ellipse cx="50" cy="65" rx="3" ry="2" fill="hsl(340 70% 45%)"/>
-          <path d="M 46 70 Q 50 74 54 70" stroke="hsl(340 50% 30%)" strokeWidth="1.8" fill="none" strokeLinecap="round"/>
+          {/* frosted glass body */}
+          <foreignObject x="0" y="0" width="56" height="64" clipPath="url(#arrow-clip)">
+            <div
+              // @ts-ignore
+              xmlns="http://www.w3.org/1999/xhtml"
+              style={{
+                width: "100%",
+                height: "100%",
+                background: "linear-gradient(135deg, hsla(340,100%,98%,0.55), hsla(320,90%,80%,0.35))",
+                backdropFilter: "blur(8px) saturate(160%)",
+                WebkitBackdropFilter: "blur(8px) saturate(160%)",
+              }}
+            />
+          </foreignObject>
+          {/* gradient sheen overlay */}
+          <path d="M6 4 L6 50 L18 40 L26 58 L34 54 L26 36 L42 36 Z" fill="url(#arrow-glass)" />
+          {/* pink border */}
+          <path
+            d="M6 4 L6 50 L18 40 L26 58 L34 54 L26 36 L42 36 Z"
+            fill="none"
+            stroke="hsl(335 90% 60%)"
+            strokeWidth="2.2"
+            strokeLinejoin="round"
+          />
+          {/* highlight shimmer */}
+          <path d="M9 8 L9 22" stroke="hsl(0 0% 100% / 0.7)" strokeWidth="1.2" strokeLinecap="round"/>
         </svg>
       </motion.div>
     </motion.div>
