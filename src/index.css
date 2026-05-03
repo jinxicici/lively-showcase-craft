@@ -104,3 +104,25 @@
 
 @keyframes blink { 50% { opacity: 0; } }
 .cursor-blink::after { content:"_"; animation: blink 1s step-end infinite; margin-left: 2px; }
+
+@media (pointer: fine) {
+  html, body, a, button, [role="button"] { cursor: none !important; }
+}
+
+@keyframes petal-fall {
+  0% { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(110vh) translateX(var(--drift, 60px)) rotate(540deg); opacity: 0; }
+}
+.petal {
+  position: fixed; top: 0; pointer-events: none; z-index: 2;
+  will-change: transform, opacity;
+  animation: petal-fall linear infinite;
+  filter: drop-shadow(0 2px 4px hsl(335 85% 65% / 0.3));
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+.wiggle { animation: wiggle 2.5s ease-in-out infinite; transform-origin: center; }
