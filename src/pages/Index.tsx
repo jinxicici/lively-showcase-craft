@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Mail, Phone, MessageCircle, Github, Globe, Download, Sparkles } from "lucide-react";
+import { ArrowUpRight, Mail, Phone, MessageCircle, Github, Globe, Download, Sparkles, Copy, Check } from "lucide-react";
+import { toast } from "sonner";
 
 /* --------- helpers --------- */
 const Reveal = ({ children, delay = 0, y = 24 }: any) => (
@@ -53,46 +54,41 @@ const Cursor = () => {
       <motion.div
         animate={{ scale: down ? 0.85 : hover ? 1.2 : 1 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        style={{ filter: "drop-shadow(0 6px 16px hsl(335 85% 65% / 0.45))" }}
+        style={{
+          filter: "drop-shadow(0 4px 10px hsl(335 95% 60% / 0.45))",
+          imageRendering: "pixelated",
+          shapeRendering: "crispEdges",
+        }}
       >
-        {/* Arrow-shaped mouse pointer: pink border + frosted glass fill */}
-        <svg width="56" height="64" viewBox="0 0 56 64" className="overflow-visible">
+        {/* Pixel-style arrow cursor: hot pink border + frosted glass fill (solid, no gradient) */}
+        <svg width="44" height="52" viewBox="0 0 22 26" shapeRendering="crispEdges" style={{ imageRendering: "pixelated" }}>
           <defs>
-            <clipPath id="arrow-clip">
-              <path d="M6 4 L6 50 L18 40 L26 58 L34 54 L26 36 L42 36 Z" />
+            <clipPath id="px-arrow-clip">
+              <path d="M3 2 L3 19 L7 16 L10 22 L13 21 L10 15 L16 15 Z" />
             </clipPath>
-            <linearGradient id="arrow-glass" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="hsl(340 100% 98%)" stopOpacity="0.85"/>
-              <stop offset="50%" stopColor="hsl(335 90% 88%)" stopOpacity="0.45"/>
-              <stop offset="100%" stopColor="hsl(320 90% 80%)" stopOpacity="0.55"/>
-            </linearGradient>
           </defs>
-          {/* frosted glass body */}
-          <foreignObject x="0" y="0" width="56" height="64" clipPath="url(#arrow-clip)">
+          {/* frosted glass fill — solid translucent white, no gradient */}
+          <foreignObject x="0" y="0" width="22" height="26" clipPath="url(#px-arrow-clip)">
             <div
               // @ts-ignore
               xmlns="http://www.w3.org/1999/xhtml"
               style={{
                 width: "100%",
                 height: "100%",
-                background: "linear-gradient(135deg, hsla(340,100%,98%,0.55), hsla(320,90%,80%,0.35))",
-                backdropFilter: "blur(8px) saturate(160%)",
-                WebkitBackdropFilter: "blur(8px) saturate(160%)",
+                background: "hsla(0, 0%, 100%, 0.55)",
+                backdropFilter: "blur(10px) saturate(180%)",
+                WebkitBackdropFilter: "blur(10px) saturate(180%)",
               }}
             />
           </foreignObject>
-          {/* gradient sheen overlay */}
-          <path d="M6 4 L6 50 L18 40 L26 58 L34 54 L26 36 L42 36 Z" fill="url(#arrow-glass)" />
-          {/* pink border */}
+          {/* chunky pixel pink border */}
           <path
-            d="M6 4 L6 50 L18 40 L26 58 L34 54 L26 36 L42 36 Z"
+            d="M3 2 L3 19 L7 16 L10 22 L13 21 L10 15 L16 15 Z"
             fill="none"
-            stroke="hsl(335 90% 60%)"
-            strokeWidth="2.2"
-            strokeLinejoin="round"
+            stroke="hsl(330 100% 55%)"
+            strokeWidth="1.5"
+            strokeLinejoin="miter"
           />
-          {/* highlight shimmer */}
-          <path d="M9 8 L9 22" stroke="hsl(0 0% 100% / 0.7)" strokeWidth="1.2" strokeLinecap="round"/>
         </svg>
       </motion.div>
     </motion.div>
@@ -136,6 +132,46 @@ const Petals = () => {
   });
   return <div aria-hidden className="pointer-events-none fixed inset-0 z-[2] overflow-hidden">{petals}</div>;
 };
+
+/* --------- Quick Contact (click to copy) --------- */
+const CopyChip = ({ icon: Icon, label, value }: { icon: any; label: string; value: string }) => {
+  const [done, setDone] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setDone(true);
+      toast.success(`${label}已复制`, { description: value });
+      setTimeout(() => setDone(false), 1600);
+    } catch {
+      toast.error("复制失败，请手动选择");
+    }
+  };
+  return (
+    <button
+      data-cursor
+      onClick={copy}
+      className="group flex items-center gap-2 rounded-full border-2 border-primary/30 bg-white/80 px-4 py-2 text-sm font-medium text-primary shadow-[0_4px_0_hsl(335_90%_60%/0.25)] transition-all hover:border-primary hover:bg-primary hover:text-white hover:-translate-y-0.5 active:translate-y-0 active:shadow-[0_2px_0_hsl(335_90%_60%/0.25)]"
+      title={`点击复制${label}`}
+    >
+      <Icon className="h-4 w-4" />
+      <span className="font-mono">{value}</span>
+      {done ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5 opacity-50 group-hover:opacity-100" />}
+    </button>
+  );
+};
+
+const ContactBar = () => (
+  <div className="fixed top-16 left-0 right-0 z-40 px-6 pointer-events-none">
+    <div className="mx-auto max-w-7xl flex justify-center md:justify-end pointer-events-auto">
+      <div className="flex flex-wrap items-center gap-2 rounded-full border-2 border-primary/20 bg-white/70 backdrop-blur-xl px-3 py-2 shadow-[0_8px_24px_-8px_hsl(335_90%_60%/0.3)]">
+        <span className="hidden md:inline pl-2 pr-1 text-xs font-mono uppercase tracking-widest text-primary">点击复制 →</span>
+        <CopyChip icon={Mail} label="邮箱" value="jinxi_cici@163.com" />
+        <CopyChip icon={Phone} label="电话" value="139 0585 5692" />
+        <CopyChip icon={MessageCircle} label="微信" value="Paranoiavine" />
+      </div>
+    </div>
+  </div>
+);
 
 /* --------- Hero --------- */
 const Hero = () => {
@@ -735,6 +771,7 @@ const Index = () => {
       <Cursor />
       <Petals />
       <Nav />
+      <ContactBar />
       <Hero />
       <Tools />
       <Accounts />
