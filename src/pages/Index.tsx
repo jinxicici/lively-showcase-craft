@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { ArrowUpRight, Mail, Phone, MessageCircle, Github, Globe, Download, Sparkles } from "lucide-react";
+import { ArrowUpRight, Mail, Phone, MessageCircle, Github, Globe, Download, Sparkles, Copy, Check } from "lucide-react";
+import { toast } from "sonner";
 
 /* --------- helpers --------- */
 const Reveal = ({ children, delay = 0, y = 24 }: any) => (
