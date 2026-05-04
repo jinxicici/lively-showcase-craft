@@ -243,6 +243,9 @@ const Hero = () => {
                   <span key={t} className="rounded-full border border-border px-3 py-1">{t}</span>
                 ))}
               </div>
+              <div className="mt-6">
+                <ContactBar />
+              </div>
             </div>
           </div>
         </Reveal>
