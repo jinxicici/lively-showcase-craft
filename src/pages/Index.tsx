@@ -1,7 +1,10 @@
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValue, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Mail, Phone, MessageCircle, Github, Globe, Download, Sparkles, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
+import heroImg1 from "@/assets/hero-xhs-1.png";
+import heroImg2 from "@/assets/hero-xhs-2.png";
+import heroImg3 from "@/assets/hero-luvbunny.png";
 
 /* --------- helpers --------- */
 const Reveal = ({ children, delay = 0, y = 24 }: any) => (
@@ -202,7 +205,60 @@ const ContactBar = () => (
   </div>
 );
 
-/* --------- Hero --------- */
+/* --------- Hero Gallery (click-to-expand) --------- */
+const HeroGallery = () => {
+  const items = [
+    { src: heroImg1, label: "兴趣种草号", meta: "粉丝 2,147 · 获赞收藏 10.3w+" },
+    { src: heroImg2, label: "美妆测评号", meta: "粉丝 1,678 · 获赞收藏 2.3w+" },
+    { src: heroImg3, label: "Luv Bunny", meta: "已上线 App · 原创 IP" },
+  ];
+  const [active, setActive] = useState(0);
+  return (
+    <div className="relative">
+      {/* main panel */}
+      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] border-2 border-primary/30 bg-white shadow-[0_20px_60px_-20px_hsl(335_90%_60%/0.45)]">
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={active}
+            src={items[active].src}
+            alt={items[active].label}
+            initial={{ opacity: 0, scale: 1.04 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </AnimatePresence>
+        {/* caption */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/55 via-black/20 to-transparent p-4">
+          <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/80">0{active + 1} / 0{items.length}</div>
+          <div className="mt-1 font-serif text-xl text-white">{items[active].label}</div>
+          <div className="font-mono text-xs text-white/85">{items[active].meta}</div>
+        </div>
+      </div>
+
+      {/* thumbnails */}
+      <div className="mt-3 grid grid-cols-3 gap-3">
+        {items.map((it, i) => (
+          <button
+            key={i}
+            data-cursor
+            onClick={() => setActive(i)}
+            aria-label={`查看 ${it.label}`}
+            className={`relative aspect-square overflow-hidden rounded-2xl border-2 transition-all ${
+              active === i
+                ? "border-primary scale-[1.03] shadow-[0_8px_20px_-6px_hsl(335_90%_60%/0.5)]"
+                : "border-primary/20 hover:border-primary/60 opacity-70 hover:opacity-100"
+            }`}
+          >
+            <img src={it.src} alt={it.label} className="absolute inset-0 h-full w-full object-cover" />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const Hero = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -211,48 +267,57 @@ const Hero = () => {
 
   return (
     <section ref={ref} className="relative min-h-screen overflow-hidden bg-cream">
-      <motion.div style={{ y, opacity: op }} className="relative z-10 mx-auto max-w-7xl px-6 pt-28 md:pt-36 pb-20">
-        <Reveal>
-          <div className="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.25em] text-muted-foreground">
-            <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-            2027 届 · 浙江杭州
-          </div>
-        </Reveal>
+      <motion.div style={{ y, opacity: op }} className="relative z-10 mx-auto max-w-7xl px-6 pt-28 md:pt-32 pb-24">
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-10 items-center">
+          {/* Left column — text */}
+          <div className="lg:col-span-7">
+            <Reveal>
+              <div className="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.25em] text-muted-foreground">
+                <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
+                2027 届 · 浙江杭州
+              </div>
+            </Reveal>
 
-        <h1 className="mt-6 font-serif text-[8vw] leading-[0.95] tracking-tight md:text-[5vw] lg:text-[80px]">
-          <Reveal delay={0.05}><span className="block">钱奕彤</span></Reveal>
-          <Reveal delay={0.15}>
-            <span className="block italic text-muted-foreground">Yvette<span className="text-accent">.</span></span>
-          </Reveal>
-        </h1>
+            <h1 className="mt-5 font-serif leading-[0.92] tracking-tight">
+              <Reveal delay={0.05}>
+                <span className="block text-[14vw] md:text-[8vw] lg:text-[112px]">钱奕彤</span>
+              </Reveal>
+              <Reveal delay={0.15}>
+                <span className="block italic text-muted-foreground text-[10vw] md:text-[6vw] lg:text-[80px]">
+                  Yvette<span className="text-accent">.</span>
+                </span>
+              </Reveal>
+            </h1>
 
-        <Reveal delay={0.22}>
-          <p className="mt-6 font-serif text-3xl md:text-5xl lg:text-6xl leading-tight tracking-tight text-balance">
-            2027 届 · 浙江财经大学
-            <span className="block mt-2">市场营销（中美合作）本科</span>
-          </p>
-        </Reveal>
-
-        <Reveal delay={0.3}>
-          <div className="mt-8">
-            <ContactBar />
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.4}>
-          <div className="mt-10 grid gap-8 md:grid-cols-12">
-            <div className="md:col-span-7">
-              <p className="text-2xl md:text-3xl leading-snug font-light text-balance">
-                三个账号矩阵 <span className="font-mono text-base align-middle">·</span> 一个上线 App <span className="font-mono text-base align-middle">·</span> 30+ 场校园活动传播 <span className="font-mono text-base align-middle">·</span> 一等奖商赛策划。
+            <Reveal delay={0.22}>
+              <p className="mt-6 font-serif text-2xl md:text-3xl lg:text-[34px] leading-tight tracking-tight text-balance">
+                浙江财经大学 · 市场营销
+                <span className="text-muted-foreground">（中美合作）本科</span>
               </p>
-              <div className="mt-6 flex flex-wrap gap-2 font-mono text-xs">
+            </Reveal>
+
+            <Reveal delay={0.3}>
+              <div className="mt-7">
+                <ContactBar />
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.4}>
+              <div className="mt-8 flex flex-wrap gap-2 font-mono text-xs">
                 {["内容运营", "账号增长", "活动传播", "AI 协作", "产品策划"].map(t => (
-                  <span key={t} className="rounded-full border border-border px-3 py-1">{t}</span>
+                  <span key={t} className="rounded-full border border-border bg-white/60 px-3 py-1">{t}</span>
                 ))}
               </div>
-            </div>
+            </Reveal>
           </div>
-        </Reveal>
+
+          {/* Right column — interactive image gallery */}
+          <div className="lg:col-span-5">
+            <Reveal delay={0.2}>
+              <HeroGallery />
+            </Reveal>
+          </div>
+        </div>
       </motion.div>
 
       {/* ticker */}
