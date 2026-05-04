@@ -205,56 +205,58 @@ const ContactBar = () => (
   </div>
 );
 
-/* --------- Hero Gallery (click-to-expand) --------- */
+/* --------- Hero Gallery (stacked cards, hover to pop) --------- */
 const HeroGallery = () => {
   const items = [
-    { src: heroImg1, label: "兴趣种草号", meta: "粉丝 2,147 · 获赞收藏 10.3w+" },
-    { src: heroImg2, label: "美妆测评号", meta: "粉丝 1,678 · 获赞收藏 2.3w+" },
-    { src: heroImg3, label: "Luv Bunny", meta: "已上线 App · 原创 IP" },
+    { src: heroImg1, label: "兴趣种草号", meta: "粉丝 2,147 · 获赞收藏 10.3w+", rotate: -8, x: -40, y: 10 },
+    { src: heroImg2, label: "美妆测评号", meta: "粉丝 1,678 · 获赞收藏 2.3w+", rotate: 4, x: 0, y: -10 },
+    { src: heroImg3, label: "Luv Bunny", meta: "已上线 App · 原创 IP", rotate: 10, x: 40, y: 14 },
   ];
-  const [active, setActive] = useState(0);
+  const [hover, setHover] = useState<number | null>(1);
   return (
-    <div className="relative">
-      {/* main panel */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] border-2 border-primary/30 bg-white shadow-[0_20px_60px_-20px_hsl(335_90%_60%/0.45)]">
-        <AnimatePresence mode="wait">
-          <motion.img
-            key={active}
-            src={items[active].src}
-            alt={items[active].label}
-            initial={{ opacity: 0, scale: 1.04 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        </AnimatePresence>
-        {/* caption */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/55 via-black/20 to-transparent p-4">
-          <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/80">0{active + 1} / 0{items.length}</div>
-          <div className="mt-1 font-serif text-xl text-white">{items[active].label}</div>
-          <div className="font-mono text-xs text-white/85">{items[active].meta}</div>
-        </div>
-      </div>
-
-      {/* thumbnails */}
-      <div className="mt-3 grid grid-cols-3 gap-3">
-        {items.map((it, i) => (
-          <button
+    <div className="relative mx-auto h-[460px] w-full max-w-[420px] md:h-[520px]" style={{ perspective: 1200 }}>
+      {items.map((it, i) => {
+        const isHover = hover === i;
+        const isAnyHover = hover !== null;
+        const baseZ = i;
+        return (
+          <motion.div
             key={i}
             data-cursor
-            onClick={() => setActive(i)}
-            aria-label={`查看 ${it.label}`}
-            className={`relative aspect-square overflow-hidden rounded-2xl border-2 transition-all ${
-              active === i
-                ? "border-primary scale-[1.03] shadow-[0_8px_20px_-6px_hsl(335_90%_60%/0.5)]"
-                : "border-primary/20 hover:border-primary/60 opacity-70 hover:opacity-100"
-            }`}
+            onMouseEnter={() => setHover(i)}
+            onMouseLeave={() => setHover(null)}
+            initial={false}
+            animate={{
+              x: isHover ? it.x * 0.4 : it.x,
+              y: isHover ? -40 : it.y,
+              rotate: isHover ? 0 : it.rotate,
+              scale: isHover ? 1.08 : isAnyHover ? 0.96 : 1,
+              zIndex: isHover ? 50 : baseZ,
+            }}
+            transition={{ type: "spring", stiffness: 220, damping: 22, mass: 0.7 }}
+            style={{ zIndex: isHover ? 50 : baseZ }}
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[68%] aspect-[3/4] cursor-pointer"
           >
-            <img src={it.src} alt={it.label} className="absolute inset-0 h-full w-full object-cover" />
-          </button>
-        ))}
-      </div>
+            <div className="relative h-full w-full overflow-hidden rounded-[24px] border-[3px] border-primary bg-white shadow-[0_20px_50px_-15px_hsl(335_90%_60%/0.55)]">
+              <img src={it.src} alt={it.label} className="absolute inset-0 h-full w-full object-cover" />
+              {/* caption appears on hover */}
+              <motion.div
+                initial={false}
+                animate={{ opacity: isHover ? 1 : 0, y: isHover ? 0 : 8 }}
+                transition={{ duration: 0.25 }}
+                className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent p-4 pointer-events-none"
+              >
+                <div className="font-serif text-lg text-white leading-tight">{it.label}</div>
+                <div className="font-mono text-[11px] text-white/85 mt-0.5">{it.meta}</div>
+              </motion.div>
+              {/* card index chip */}
+              <div className="absolute top-3 left-3 rounded-full bg-white/85 backdrop-blur px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-primary border border-primary/30">
+                0{i + 1}
+              </div>
+            </div>
+          </motion.div>
+        );
+      })}
     </div>
   );
 };
