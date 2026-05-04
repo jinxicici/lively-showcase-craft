@@ -195,15 +195,11 @@ const CopyChip = ({ icon: Icon, label, value }: { icon: any; label: string; valu
 };
 
 const ContactBar = () => (
-  <div className="fixed top-16 left-0 right-0 z-40 px-6 pointer-events-none">
-    <div className="mx-auto max-w-7xl flex justify-center md:justify-end pointer-events-auto">
-      <div className="flex flex-wrap items-center gap-2 rounded-full border-2 border-primary/20 bg-white/70 backdrop-blur-xl px-3 py-2 shadow-[0_8px_24px_-8px_hsl(335_90%_60%/0.3)]">
-        <span className="hidden md:inline pl-2 pr-1 text-xs font-mono uppercase tracking-widest text-primary">点击复制 →</span>
-        <CopyChip icon={Mail} label="邮箱" value="jinxi_cici@163.com" />
-        <CopyChip icon={Phone} label="电话" value="139 0585 5692" />
-        <CopyChip icon={MessageCircle} label="微信" value="Paranoiavine" />
-      </div>
-    </div>
+  <div className="flex flex-wrap items-center gap-2 rounded-full border-2 border-primary/20 bg-white/70 backdrop-blur-xl px-3 py-2 shadow-[0_8px_24px_-8px_hsl(335_90%_60%/0.3)] w-fit">
+    <span className="hidden md:inline pl-2 pr-1 text-xs font-mono uppercase tracking-widest text-primary">点击复制 →</span>
+    <CopyChip icon={Mail} label="邮箱" value="jinxi_cici@163.com" />
+    <CopyChip icon={Phone} label="电话" value="139 0585 5692" />
+    <CopyChip icon={MessageCircle} label="微信" value="Paranoiavine" />
   </div>
 );
 
@@ -246,6 +242,9 @@ const Hero = () => {
                 {["内容运营", "账号增长", "活动传播", "AI 协作", "产品策划"].map(t => (
                   <span key={t} className="rounded-full border border-border px-3 py-1">{t}</span>
                 ))}
+              </div>
+              <div className="mt-6">
+                <ContactBar />
               </div>
             </div>
           </div>
@@ -805,7 +804,6 @@ const Index = () => {
       <Cursor />
       <Petals />
       <Nav />
-      <ContactBar />
       <Hero />
       <Tools />
       <Accounts />
