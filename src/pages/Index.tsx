@@ -266,7 +266,7 @@ const Hero = () => {
   return (
     <section ref={ref} className="relative min-h-screen overflow-hidden bg-cream">
       <motion.div style={{ y, opacity: op }} className="relative z-10 mx-auto max-w-7xl px-6 pt-28 md:pt-32 pb-24">
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-10 items-center">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-8 items-start">
           {/* Left column — text */}
           <div className="lg:col-span-7">
             <Reveal>
@@ -310,7 +310,7 @@ const Hero = () => {
           </div>
 
           {/* Right column — interactive image gallery */}
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5 lg:pt-12">
             <Reveal delay={0.2}>
               <HeroGallery />
             </Reveal>
