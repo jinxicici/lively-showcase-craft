@@ -208,17 +208,16 @@ const ContactBar = () => (
 /* --------- Hero Gallery (stacked cards, hover to pop) --------- */
 const HeroGallery = () => {
   const items = [
-    { src: heroImg1, label: "兴趣种草号", meta: "粉丝 2,147 · 获赞收藏 10.3w+", rotate: -8, x: -40, y: 10 },
-    { src: heroImg2, label: "美妆测评号", meta: "粉丝 1,678 · 获赞收藏 2.3w+", rotate: 4, x: 0, y: -10 },
-    { src: heroImg3, label: "Luv Bunny", meta: "已上线 App · 原创 IP", rotate: 10, x: 40, y: 14 },
+    { src: heroImg1, label: "兴趣种草号", meta: "粉丝 2,147 · 获赞收藏 10.3w+", rotate: -10, x: -110, y: 30 },
+    { src: heroImg2, label: "美妆测评号", meta: "粉丝 1,678 · 获赞收藏 2.3w+", rotate: 0, x: 0, y: -10 },
+    { src: heroImg3, label: "Luv Bunny", meta: "已上线 App · 原创 IP", rotate: 10, x: 110, y: 30 },
   ];
   const [hover, setHover] = useState<number | null>(1);
   return (
-    <div className="relative mx-auto h-[460px] w-full max-w-[420px] md:h-[520px]" style={{ perspective: 1200 }}>
+    <div className="relative mx-auto h-[440px] w-full max-w-[460px] md:h-[480px]">
       {items.map((it, i) => {
         const isHover = hover === i;
         const isAnyHover = hover !== null;
-        const baseZ = i;
         return (
           <motion.div
             key={i}
@@ -227,19 +226,17 @@ const HeroGallery = () => {
             onMouseLeave={() => setHover(null)}
             initial={false}
             animate={{
-              x: isHover ? it.x * 0.4 : it.x,
-              y: isHover ? -40 : it.y,
+              x: isHover ? it.x * 0.5 : it.x,
+              y: isHover ? -30 : it.y,
               rotate: isHover ? 0 : it.rotate,
-              scale: isHover ? 1.08 : isAnyHover ? 0.96 : 1,
-              zIndex: isHover ? 50 : baseZ,
+              scale: isHover ? 1.08 : isAnyHover && !isHover ? 0.95 : 1,
             }}
             transition={{ type: "spring", stiffness: 220, damping: 22, mass: 0.7 }}
-            style={{ zIndex: isHover ? 50 : baseZ }}
-            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[68%] aspect-[3/4] cursor-pointer"
+            style={{ zIndex: isHover ? 50 : 10 + i }}
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[58%] aspect-[3/4] cursor-pointer"
           >
             <div className="relative h-full w-full overflow-hidden rounded-[24px] border-[3px] border-primary bg-white shadow-[0_20px_50px_-15px_hsl(335_90%_60%/0.55)]">
               <img src={it.src} alt={it.label} className="absolute inset-0 h-full w-full object-cover" />
-              {/* caption appears on hover */}
               <motion.div
                 initial={false}
                 animate={{ opacity: isHover ? 1 : 0, y: isHover ? 0 : 8 }}
@@ -249,7 +246,6 @@ const HeroGallery = () => {
                 <div className="font-serif text-lg text-white leading-tight">{it.label}</div>
                 <div className="font-mono text-[11px] text-white/85 mt-0.5">{it.meta}</div>
               </motion.div>
-              {/* card index chip */}
               <div className="absolute top-3 left-3 rounded-full bg-white/85 backdrop-blur px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest text-primary border border-primary/30">
                 0{i + 1}
               </div>
