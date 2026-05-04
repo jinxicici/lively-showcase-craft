@@ -205,10 +205,6 @@ const ContactBar = () => (
   </div>
 );
 
-/* --------- Hero --------- */
-const Hero = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
 /* --------- Hero Gallery (click-to-expand) --------- */
 const HeroGallery = () => {
   const items = [
