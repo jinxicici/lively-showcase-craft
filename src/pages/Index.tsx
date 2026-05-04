@@ -209,6 +209,63 @@ const ContactBar = () => (
 const Hero = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+/* --------- Hero Gallery (click-to-expand) --------- */
+const HeroGallery = () => {
+  const items = [
+    { src: heroImg1, label: "兴趣种草号", meta: "粉丝 2,147 · 获赞收藏 10.3w+" },
+    { src: heroImg2, label: "美妆测评号", meta: "粉丝 1,678 · 获赞收藏 2.3w+" },
+    { src: heroImg3, label: "Luv Bunny", meta: "已上线 App · 原创 IP" },
+  ];
+  const [active, setActive] = useState(0);
+  return (
+    <div className="relative">
+      {/* main panel */}
+      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] border-2 border-primary/30 bg-white shadow-[0_20px_60px_-20px_hsl(335_90%_60%/0.45)]">
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={active}
+            src={items[active].src}
+            alt={items[active].label}
+            initial={{ opacity: 0, scale: 1.04 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </AnimatePresence>
+        {/* caption */}
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/55 via-black/20 to-transparent p-4">
+          <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-white/80">0{active + 1} / 0{items.length}</div>
+          <div className="mt-1 font-serif text-xl text-white">{items[active].label}</div>
+          <div className="font-mono text-xs text-white/85">{items[active].meta}</div>
+        </div>
+      </div>
+
+      {/* thumbnails */}
+      <div className="mt-3 grid grid-cols-3 gap-3">
+        {items.map((it, i) => (
+          <button
+            key={i}
+            data-cursor
+            onClick={() => setActive(i)}
+            aria-label={`查看 ${it.label}`}
+            className={`relative aspect-square overflow-hidden rounded-2xl border-2 transition-all ${
+              active === i
+                ? "border-primary scale-[1.03] shadow-[0_8px_20px_-6px_hsl(335_90%_60%/0.5)]"
+                : "border-primary/20 hover:border-primary/60 opacity-70 hover:opacity-100"
+            }`}
+          >
+            <img src={it.src} alt={it.label} className="absolute inset-0 h-full w-full object-cover" />
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const Hero = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const op = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
