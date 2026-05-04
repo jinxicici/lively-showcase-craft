@@ -196,7 +196,6 @@ const CopyChip = ({ icon: Icon, label, value }: { icon: any; label: string; valu
 
 const ContactBar = () => (
   <div className="flex flex-wrap items-center gap-2 rounded-full border-2 border-primary/20 bg-white/70 backdrop-blur-xl px-3 py-2 shadow-[0_8px_24px_-8px_hsl(335_90%_60%/0.3)] w-fit">
-    <span className="hidden md:inline pl-2 pr-1 text-xs font-mono uppercase tracking-widest text-primary">点击复制 →</span>
     <CopyChip icon={Mail} label="邮箱" value="jinxi_cici@163.com" />
     <CopyChip icon={Phone} label="电话" value="139 0585 5692" />
     <CopyChip icon={MessageCircle} label="微信" value="Paranoiavine" />
@@ -216,35 +215,40 @@ const Hero = () => {
         <Reveal>
           <div className="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.25em] text-muted-foreground">
             <span className="h-2 w-2 rounded-full bg-accent animate-pulse" />
-            2027 届 · 浙江财经大学 · 现可入职
+            2027 届 · 浙江杭州
           </div>
         </Reveal>
 
-        <h1 className="mt-8 font-serif text-[14vw] leading-[0.88] tracking-tight md:text-[10vw] lg:text-[180px]">
+        <h1 className="mt-6 font-serif text-[8vw] leading-[0.95] tracking-tight md:text-[5vw] lg:text-[80px]">
           <Reveal delay={0.05}><span className="block">钱奕彤</span></Reveal>
           <Reveal delay={0.15}>
             <span className="block italic text-muted-foreground">Yvette<span className="text-accent">.</span></span>
           </Reveal>
         </h1>
 
+        <Reveal delay={0.22}>
+          <p className="mt-6 font-serif text-3xl md:text-5xl lg:text-6xl leading-tight tracking-tight text-balance">
+            2027 届 · 浙江财经大学
+            <span className="block mt-2">市场营销（中美合作）本科</span>
+          </p>
+        </Reveal>
+
         <Reveal delay={0.3}>
+          <div className="mt-8">
+            <ContactBar />
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.4}>
           <div className="mt-10 grid gap-8 md:grid-cols-12">
-            <p className="md:col-span-7 text-2xl md:text-3xl leading-snug font-light text-balance">
-              我在做<span className="bg-highlight/60 px-1">运营类实习生</span>。
-              三个账号矩阵 <span className="font-mono text-base align-middle">·</span> 一个上线 App <span className="font-mono text-base align-middle">·</span> 30+ 场校园活动传播 <span className="font-mono text-base align-middle">·</span> 一等奖商赛策划。
-            </p>
-            <div className="md:col-span-5 md:pl-8 md:border-l border-border">
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                市场营销（中美合作）本科 · 大三在读 · 浙江杭州。
-                擅长内容运营、账号增长、活动传播与产品策划，能从选题到数据复盘独立闭环。
+            <div className="md:col-span-7">
+              <p className="text-2xl md:text-3xl leading-snug font-light text-balance">
+                三个账号矩阵 <span className="font-mono text-base align-middle">·</span> 一个上线 App <span className="font-mono text-base align-middle">·</span> 30+ 场校园活动传播 <span className="font-mono text-base align-middle">·</span> 一等奖商赛策划。
               </p>
               <div className="mt-6 flex flex-wrap gap-2 font-mono text-xs">
                 {["内容运营", "账号增长", "活动传播", "AI 协作", "产品策划"].map(t => (
                   <span key={t} className="rounded-full border border-border px-3 py-1">{t}</span>
                 ))}
-              </div>
-              <div className="mt-6">
-                <ContactBar />
               </div>
             </div>
           </div>
