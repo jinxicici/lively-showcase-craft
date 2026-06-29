@@ -800,7 +800,7 @@ const Contact = () => (
       </Reveal>
       <Reveal delay={0.2}>
         <p className="mt-6 max-w-xl text-cream/70">
-          运营类实习生 · 现可入职 · 杭州 / 远程皆可。欢迎邮件、微信或电话直接聊。
+          现可入职 · 杭州 / 远程皆可。欢迎邮件、微信或电话直接聊。
         </p>
       </Reveal>
 
